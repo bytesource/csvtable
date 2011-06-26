@@ -1,15 +1,18 @@
-h1. CSVTable: 
-h2. A class for entering data from a CSV file into a database
+h1. CSVTable
+
+h2. A Ruby class for entering data from a CSV file into a database
 
 CSVTable reads a CSV file from a given path and stores its headers and fields
 This data can be later entered into a corresponding database using the CSVTable.execute method.
 Sequel is used as the ORM between CSVTable and the database.
 
 h1. Assumptions Made Regarding The CSV File
+
 h2. File Name
 * The name of the database table must be given as a prefix, followed by an underscore (_).
 * Uppercase letters will be converted to lowercase.
 * The name of the table cannot be ommited.
+
 Example
 <pre><code>
 DNA_check.csv 
@@ -27,12 +30,14 @@ h2. Fields
 * If a value is missing anywhere else, it is set to a replacement value, "NULL" by default.
 
 h2. Safety Measures
+
 In order to avoid entering the same data into the database table twice,
 an instance variable @executed (default value: false) is set to true after all fields of a csv table
 have been successfully entered into the database.
 
 
-h3. NOTE:
+h3. NOTE
+
 As this is my first attempt at programming in Ruby the code is probably not very idiomatic. 
 However, I'd love to get better and expecially learn Ruby best practices. 
 So, if anybody would like to help me make this code more idiomatic and robust, I welcome you to make the necessary changes! 
