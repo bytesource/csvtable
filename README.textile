@@ -6,9 +6,9 @@ CSVTable reads a CSV file from a given path and stores its headers and fields.
 This data can be later entered into a corresponding database using the CSVTable.execute method.
 "Sequel":http://sequel.rubyforge.org/ is used as the ORM between CSVTable and the database.
 
-h1. Usage 
+h2. Usage 
 
-h2. Table Name
+h3. Table Name
 * The name of the database table is given as a prefix to the csv file, followed by an underscore (_).
 * Uppercase letters will be converted to lowercase.
 * The name of the table cannot be ommited.
@@ -19,11 +19,11 @@ DNA_check.csv
 </code></pre>
 The prefix _DNA_ will be converted into _:dna_ and stored as the table name. 
 
-h2. Headers
+h3. Headers
 * Header names must match their corresponding column names.
 * Uppercase letters will be converted to lowercase.
 
-h2. Fields
+h3. Fields
 * If a String value represents an Integer, this value is converted into an Integer.
 * If a String value represents a Float, this value is converted into a Float.
 * If a value is missing at the end, it is set to "NULL"
