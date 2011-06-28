@@ -10,7 +10,7 @@ require 'csvtable'
 
 csv_path = File.join(File.expand_path(File.dirname(__FILE__)), "test", "tables")
 
-check_path = csv_path + "/DNA_check.csv"
+check_path = csv_path + "/DNA@check.csv"
 
 
 table = CSVTable.new(check_path)
@@ -39,10 +39,16 @@ unless DB.table_exists?(table.name)
     Integer     :item
     String      :description
     Float       :price
+    String      :hash
   end
 end
 
+puts "Path to csv file: #{check_path}"
+puts "Table name: #{table.name}"
+puts "@fields: #{table.fields}"
+puts "@data_hash: #{table.data_hash}"
 table.execute DB
 
 puts "Testing database:"
 puts DB.schema(:dna)
+puts DB[:dna].all

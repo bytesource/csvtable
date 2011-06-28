@@ -1,3 +1,5 @@
+require 'digest'
+
 class String
   # Checks if String represents an Integer.
   def is_i?
@@ -16,19 +18,28 @@ end
 
 
 class CSVTable
-  attr_accessor :name, :headers, :fields
-  attr_reader :executed
+  attr_accessor :name
+  attr_reader   :headers, :fields, :data_hash, :executed
 
+  @default_separator = "@"
+
+  # Class methods are singleton methods on a CLASS OBJECT.
+  class << self
+    attr_accessor :default_separator
+  end
 
   def initialize path
-    raise ArgumentError, "File does not exist" unless File.exists?( path )
+    raise ArgumentError, "File does not exist!" unless File.exists?( path )
     raise Exception, "Can only read csv files" unless can_read?( path)
 
     data = prepare File.open(path) 
 
+    @separator  = CSVTable.default_separator
     @name       = table_name(path)
     @headers    = extract_headers(data)
     @fields     = extract_fields(data)
+    
+    @data_hash  = make_hash(@fields)
     @executed   = false
   end
 
@@ -43,19 +54,32 @@ class CSVTable
 
     name ||= @name
     # Create a dataset
-    table_name = connection[name]
+    dataset = connection[name]
     data  = fields_hash(@fields)
 
+
+    raise Exception, "Data already in table. Abort!" if data_already_in_table? dataset
     # Populate the table
     data.map do |row|
-      insert_data(table_name, row)
+      insert_data(dataset, row)
     end
     # $! = Global variable set to the last exception raised.
     @executed = true unless $!
   end
 
+  def executed?
+    @executed
+  end
+
 
   private
+
+  def data_already_in_table? dataset
+    stored_hashes = dataset.map {|row| row[:hash]}
+
+    stored_hashes.find {|value| value == @data_hash}
+  end
+
   # Expects a Sequel dataset
   def insert_data dataset, data_row
     dataset.insert(data_row)
@@ -69,7 +93,8 @@ class CSVTable
     # 2) gsub:     --> TableName
     # 3) downcase: --> tablename
     # 4) to_sym:   --> :tablename
-    path.match(/\/[^\/]+_/)[0].gsub(/^.|.$/,'').downcase.to_sym
+    regex = Regexp.new("\/[^\/]+#{@separator}")
+    path.match(regex)[0].gsub(/^.|.$/,'').downcase.to_sym
   end
 
 
@@ -104,20 +129,19 @@ class CSVTable
   def extract_fields raw_data
     fields = raw_data.drop(1).map do |row|
       values = row.map do |val|
-        result = replace_if_blank(val)
-        result = str_to_num(result)
-        result
+        result = str_to_num(val)
+        replace_if_blank(result)
       end
 
-      values << "NULL" if values.size < @headers.size
+      values << nil if values.size < @headers.size
       values
     end
     fields
   end
 
 
-  def replace_if_blank value, new_value="NULL"
-    if blank?(value)
+  def replace_if_blank value, new_value=nil
+    if blank?(value.to_s)
       new_value
     else
       value
@@ -151,10 +175,15 @@ class CSVTable
 
 
   def to_hash keys, vals
-    zip_array = keys.zip(vals).flatten
-    Hash[*zip_array]
+    sym_keys = keys.map {|element| element.to_sym}
+    zip_array = sym_keys.zip(vals) << [:hash, @data_hash] # add unique hash
+    Hash[*zip_array.flatten]
   end
-end
+
+  def make_hash data  
+    Digest::SHA2.hexdigest(data.to_s)
+  end
+  end
 
 
 

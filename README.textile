@@ -3,15 +3,17 @@ h1. CSVTable
 h3. A Ruby class for entering data from a CSV file into a database.
 
 CSVTable reads a CSV file from a given path and stores its headers and fields.
-This data can be later entered into a corresponding database using the CSVTable.execute method.
+This data can be later entered into a corresponding database using the CSVTable#execute method.
 "Sequel":http://sequel.rubyforge.org/ is used as the ORM between CSVTable and the database.
 
-h2. Usage 
+h2. Conventions
 
-h3. Table Name
-* The name of the database table is given as a prefix to the csv file, followed by an underscore (_).
+h3. CSV File
+
+h4. Table Name
+* The name of the database table is given as a prefix to the csv file, followed by a separator (default: @)
 * Uppercase letters will be converted to lowercase.
-* The name of the table cannot be ommited.
+* The table name cannot be ommited.
 
 Example:
 <pre><code>
@@ -19,21 +21,39 @@ DNA_check.csv
 </code></pre>
 The prefix _DNA_ will be converted into _:dna_ and stored as the table name. 
 
-h3. Headers
+h4. Headers
 * Header names must match their corresponding column names.
 * Uppercase letters will be converted to lowercase.
 
-h3. Fields
+h4. Fields
 * If a String value represents an Integer, this value is converted into an Integer.
 * If a String value represents a Float, this value is converted into a Float.
 * If a value is missing at the end, it is set to "NULL"
 * If a value is missing anywhere else, it is set to a replacement value, "NULL" by default.
 
+h3. Database Table
+
+h4. Table Name
+* The table name must equal the (lowercase) prefix of the csv file name.
+
+h4. Column Names
+* Column names must equal the (lowercase) header names of the csv file.
+
+h4. :hash Column
+* Every table needs an additional (70) column with the name :hash and the type :String
+* This column ensures that the same data cannot be added twice (also see "Safety Measures" below).
+
+
 h2. Safety Measures
 
-In order to avoid entering the same data into the database table twice,
-an instance variable @executed (default value: false) is set to true after all fields of a csv table
-have been successfully entered into the database.
+* Use the _executed?_ method to test if the data of an instance of CSVTable has been successfully 
+inserted into the database table.
+* A SHA2 hash on the csv file's fields data is created and stored in an instance variable @data_hash on instantiation.
+* The hash is stored in the :hash column for every data row of a given csv file.
+* To avoid adding the same data twice, the hash values already in the database are checked against the hash value of the 
+data to be added before inserting any data. If there is a match, an exception is thrown and the (duplicate) data is not added.
+
+
 
 
 h3. NOTE
