@@ -8,16 +8,13 @@ $: << File.join(File.expand_path(File.dirname(__FILE__)), "lib")
 
 require 'csvtable'
 
-csv_path = File.join(File.expand_path(File.dirname(__FILE__)), "test", "tables")
-
+csv_path   = File.join(File.expand_path(File.dirname(__FILE__)), "test", "tables")
 check_path = csv_path + "/DNA@check.csv"
 
 
 table = CSVTable.new(check_path)
 
-# ======================================================================
 # Opening a connection
-
 require "sequel"
 
 # http://sequel.rubyforge.org/rdoc/files/doc/cheat_sheet_rdoc.html
@@ -31,8 +28,9 @@ DB = Sequel.sqlite
 #                     :host     =>'localhost', 
 #                     :database =>'plastronics', 
 #                     :user     =>'root', 
-#                     :password =>'moinmoin')
+#                     :password =>'xxx')
 
+# Create database table
 unless DB.table_exists?(table.name)
   DB.create_table table.name do
     primary_key :id, :allow_null => false
@@ -43,12 +41,12 @@ unless DB.table_exists?(table.name)
   end
 end
 
-puts "Path to csv file: #{check_path}"
-puts "Table name: #{table.name}"
-puts "@fields: #{table.fields}"
-puts "@data_hash: #{table.data_hash}"
+# Insert csv data into database table
 table.execute DB
 
+# Verifying data
 puts "Testing database:"
 puts DB.schema(:dna)
+
+puts "Pulling all data:"
 puts DB[:dna].all

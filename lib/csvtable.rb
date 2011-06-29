@@ -123,7 +123,7 @@ class CSVTable
 
 
   def formatr word
-    word.gsub(/\s+/, "_").downcase
+    word.gsub(/\s+/, "_").downcase.to_sym
   end
 
 
@@ -180,8 +180,7 @@ class CSVTable
   end
 
   def to_hash keys, vals
-    sym_keys = keys.map {|element| element.to_sym}
-    zip_array = sym_keys.zip(vals)
+    zip_array = keys.zip(vals)
     Hash[*zip_array.flatten]
   end
 
