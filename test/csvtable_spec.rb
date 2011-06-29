@@ -66,11 +66,11 @@ describe CSVTable do
       @table.send(:replace_if_blank, "    ").should == nil
     end
 
-    it "'fields_hash' should convert an array of arrays into an array of hashes" do
+    it "'fields_headers_hash' should convert an array of arrays into an array of hashes" do
 
       @array = [ ["apple", "It's delicious", 23.3] ] 
 
-      result = @table.send(:fields_hash, @array)
+      result = @table.send(:fields_headers_hash, @array, @table.headers) {|row| row.merge(:hash => @table.data_hash)}
       
       hash = {:hash => @table.data_hash}
       with_hash = [] <<  {:item=>"apple", :description=>"It's delicious", :price=>23.3}.merge(hash)
@@ -114,6 +114,15 @@ describe CSVTable do
       it "should set @executed to 'true'" do
         @table.execute DB
         @table.executed?.should be_true
+      end
+
+      it "should also handle headers enclosed in quotes" do
+        @file = "/DNA@headers_with_quotes.csv"
+        @path = @path_to = @file
+        lambda do
+          @table.execute DB
+          @table.executed?.should be_true
+        end.should_not raise_error
       end
     end
 

@@ -35,10 +35,10 @@ class CSVTable
     data = prepare File.open(path) 
 
     @separator  = CSVTable.default_separator
-    @name       = table_name(path)
+      @name       = table_name(path)
     @headers    = extract_headers(data)
     @fields     = extract_fields(data)
-    
+
     @data_hash  = make_hash(@fields)
     @executed   = false
   end
@@ -55,7 +55,8 @@ class CSVTable
     name ||= @name
     # Create a dataset
     dataset = connection[name]
-    data  = fields_hash(@fields)
+    data  = fields_headers_hash(@fields, @headers) {|row| row.merge(:hash => @data_hash)}
+
 
 
     raise Exception, "Data already in table. Abort!" if data_already_in_table? dataset
@@ -165,28 +166,48 @@ class CSVTable
   end
 
   #  [ ["apple", "It's delicious", 23.3] ]
-  #  => [ {"item"=>"apple", "description"=>"It's delicious", "price"=>23.3} ]
-  def fields_hash fields
-    hash = fields.inject([]) do |result, line|
-      result << to_hash(headers, line) 
+  #  => [ {:item=>"apple", :description=>"It's delicious", :price=>23.3} ]
+  def fields_headers_hash fields, headers, &block
+    result = fields.inject([]) do |acc, line|
+      temp = to_hash(headers, line)
+      if block_given?
+        acc << yield(temp)
+      else
+        acc << temp
+      end
     end
-    hash
+    result 
   end
-
 
   def to_hash keys, vals
     sym_keys = keys.map {|element| element.to_sym}
-    zip_array = sym_keys.zip(vals) << [:hash, @data_hash] # add unique hash
+    zip_array = sym_keys.zip(vals)
     Hash[*zip_array.flatten]
   end
 
   def make_hash data  
     Digest::SHA2.hexdigest(data.to_s)
   end
-  end
+end
 
 
 
 
-
+# def to_hash keys, vals
+#   sym_keys = keys.map {|element| element.to_sym}
+#   zip_array = sym_keys.zip(vals)
+#   Hash[*zip_array.flatten]
+# end
+# 
+# def fields_headers_hash fields, headers, &block
+#   result = fields.inject([]) do |acc, line|
+#     temp = to_hash(headers, line)
+#     if block_given?
+#       acc << yield(temp)
+#     else
+#       acc << temp
+#     end
+#   end
+#   result 
+# end
 
