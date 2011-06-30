@@ -189,24 +189,3 @@ class CSVTable
   end
 end
 
-
-
-
-# def to_hash keys, vals
-#   sym_keys = keys.map {|element| element.to_sym}
-#   zip_array = sym_keys.zip(vals)
-#   Hash[*zip_array.flatten]
-# end
-# 
-# def fields_headers_hash fields, headers, &block
-#   result = fields.inject([]) do |acc, line|
-#     temp = to_hash(headers, line)
-#     if block_given?
-#       acc << yield(temp)
-#     else
-#       acc << temp
-#     end
-#   end
-#   result 
-# end
-

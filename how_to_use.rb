@@ -38,6 +38,7 @@ unless DB.table_exists?(table.name)
     String      :description
     Float       :price
     String      :hash
+    index       :hash
   end
 end
 
