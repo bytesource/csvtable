@@ -1,4 +1,4 @@
-h1. CSVTable
+h1.{color:red} CSVTable
 
 h3. A Ruby class for entering data from a CSV file into a database.
 
