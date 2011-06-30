@@ -43,7 +43,6 @@ h4. Fields
 * If a value is missing anywhere else, it is set to a replacement value, nil by default.
 
 
-
 h3. Database Table
 
 h4. Table Name
@@ -65,7 +64,7 @@ inserted into the database.
 * This hash value is stored in the :hash column for every data row of a given csv file.
 * Before inserting any data into the database, the hash values already stored in the database are checked against the 
 hash value of data to be added.
-* If the hash value of the data to be added is found in the database, an exeption is thrown and the (dupliate) data is not inserted.
+* If the hash value of the data to be added is found in the database, an exeption is thrown and the (duplicate) data is not inserted.
 
 
 h2. Usage
