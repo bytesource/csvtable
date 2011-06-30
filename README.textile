@@ -29,8 +29,8 @@ _Example_
 <pre><code>
 DNA_check.csv 
 </code></pre>
-The prefix _DNA_ will be converted into _:dna_ and stored as the table name. 
 
+The prefix _DNA_ will be converted into _:dna_ and stored as the table name. 
 
 h4. Headers
 * Header names must match their corresponding column names.
