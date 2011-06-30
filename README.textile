@@ -2,8 +2,8 @@ h1. CSVTable
 
 h3. A Ruby class for entering data from a CSV file into a database.
 
-CSVTable reads a CSV file from a given path and stores its headers and fields.
-This data can be later entered into a corresponding database using the CSVTable#execute method.
+CSVTable reads a csv file from a given path and stores its headers and fields.
+This data can be entered into a corresponding database using the CSVTable#execute method.
 "Sequel":http://sequel.rubyforge.org/ is used as the ORM between CSVTable and the database.
 
 h2. Conventions
@@ -11,6 +11,7 @@ h2. Conventions
 h3. CSV File
 
 h4. CSV Data Format
+
 CSVTable does not deal with every kind of differently formatted csv data out there.
 Therefore it is required that the csv file adheres to the following conventions: 
 * Header names can be enclosed in quotes.
@@ -24,11 +25,12 @@ h4. Table Name
 * The prefix can be both uppercase or lowercase.
 * The prefix representing the table name cannot be ommitted.
 
-Example:
+_Example_
 <pre><code>
 DNA_check.csv 
 </code></pre>
 The prefix _DNA_ will be converted into _:dna_ and stored as the table name. 
+
 
 h4. Headers
 * Header names must match their corresponding column names.
@@ -39,6 +41,7 @@ h4. Fields
 * If a String value represents a Float, it is converted into a Float.
 * If a value is missing at the end, it is set to nil.
 * If a value is missing anywhere else, it is set to a replacement value, nil by default.
+
 
 
 h3. Database Table
@@ -74,5 +77,5 @@ h3. NOTE
 
 This is my first attempt at programming in Ruby the code and it probably shows.
 Nevertheless, I am determined to constantly improve and especially learn from the many great coders out there.
-That's why I highly appreciate any suggestions that might help me make my code more idiomatic and robust.
+That's why I _highly_ appreciate _any_ suggestions that might help me make my code more idiomatic and robust.
 
