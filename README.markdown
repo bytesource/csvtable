@@ -73,7 +73,7 @@ Item,Description,Price
 Note:
 * Every field is missing a value at different positions.
 
-1) Create a database table using [Sequel](http://sequel.rubyforge.org/) ORM:
+1) Create a database table using [Sequel](http://sequel.rubyforge.org/) ORM
     ```ruby
     require "sequel"
 
