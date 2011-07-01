@@ -17,7 +17,7 @@ It is therefore required for the csv file to adhere to the following conventions
 * Header names can be enclosed in quotes but don't need to.
 * Header names can be uppercase or lowercase (will be converted to lowercase).
 * Header names can consist of several words (spaces will be converted to underscores).
-* Field data can be missing or being empty (""). 
+* Field data can be missing or being empty (" "). 
 * Line breaks within headers or field data are not allowed. 
 
 #### Table Name
@@ -33,6 +33,7 @@ It is therefore required for the csv file to adhere to the following conventions
 * If a String value represents a Float, it is converted into a Float.
 * If a value is missing at the end, it is set to nil.
 * If a value is missing anywhere else, it is set to a replacement value, nil by default.
+
 
 
 ### Database Table
@@ -61,7 +62,9 @@ hash of data to be added.
 
 #### Sample CSV File
 File name: DNA@check.csv
+
 Contents:
+
 ```
 Item,Description,Price
 1, "This is a great product"
@@ -70,7 +73,8 @@ Item,Description,Price
 4,alles komplett,23
 ```
 
-Note:
+**Note**:
+
 * Every field is missing a value at different positions.
 
 1) Create a database table using [Sequel](http://sequel.rubyforge.org/) ORM
@@ -99,7 +103,7 @@ unless DB.table_exists?(:dna)
 end
 ```
 
-Notes:
+**Notes**:
 * Table name:   Matches the prefix of the csv file name. The table name is given in lowercase.
 * Column names: Match the names of the headers. Column names are given in lowercase.
 * Data types:   Match the valid types (string, integer, float, etc.) of the csv data.
@@ -116,6 +120,7 @@ table.executed?
 ~~~
 
 3) Insert csv data into database table
+
 ```ruby
 table.execute DB
 
@@ -130,6 +135,7 @@ puts DB[:dna].all
 ```
 
 4) Preventing duplicate data entry
+
 ```ruby
 # Calling _execute_ a second time on the same object throws an exception:
 table.execute DB
@@ -143,7 +149,7 @@ table2.execute DB
 # Exception: Data already in table. Abort!
 ```
 
-### NOTE
+### Afterword
 
 This is my first attempt at programming in Ruby the code and it probably shows.
 Nevertheless, I am determined to constantly improve and especially learn from the many great coders out there.
