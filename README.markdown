@@ -13,7 +13,8 @@ The csv data can then be entered into a corresponding database using the CSVTabl
 #### CSV Data Format
 
 CSVTable does not deal with every csv format out there.
-It is therefore required for the csv file to adhere to the following conventions: 
+It is therefore required for the csv file to adhere to the following conventions:
+
 * Header names can be enclosed in quotes but don't need to.
 * Header names can be uppercase or lowercase (will be converted to lowercase).
 * Header names can consist of several words (spaces will be converted to underscores).
@@ -73,11 +74,9 @@ Item,Description,Price
 4,alles komplett,23
 ```
 
-**Note**:
+**Note**: Every field is missing a value at different positions.
 
-* Every field is missing a value at different positions.
-
-1) Create a database table using [Sequel](http://sequel.rubyforge.org/) ORM
+1) Creating a database table using [Sequel](http://sequel.rubyforge.org/) ORM
 
 ``` ruby
 require "sequel"
@@ -104,12 +103,13 @@ end
 ```
 
 **Notes**:
+
 * Table name:   Matches the prefix of the csv file name. The table name is given in lowercase.
 * Column names: Match the names of the headers. Column names are given in lowercase.
 * Data types:   Match the valid types (string, integer, float, etc.) of the csv data.
 * String hash   Required additional column for storing a unique hash that is used to identify duplicate data entries.
 
-2) Initialize CSVTable object
+2) Initializing CSVTable object
 
 ~~~ ruby
 table = CSVTable.new(path/to/DNA@check.csv)
@@ -119,7 +119,7 @@ table.executed?
 # => false
 ~~~
 
-3) Insert csv data into database table
+3) Inserting csv data into the database 
 
 ```ruby
 table.execute DB
@@ -137,7 +137,7 @@ puts DB[:dna].all
 4) Preventing duplicate data entry
 
 ```ruby
-# Calling _execute_ a second time on the same object throws an exception:
+# Calling execute a second time on the same object throws an exception:
 table.execute DB
 # Exception: Data already copied to table dna!
 
@@ -149,7 +149,7 @@ table2.execute DB
 # Exception: Data already in table. Abort!
 ```
 
-### Afterword
+## Afterword
 
 This is my first attempt at programming in Ruby the code and it probably shows.
 Nevertheless, I am determined to constantly improve and especially learn from the many great coders out there.
