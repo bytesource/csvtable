@@ -37,6 +37,7 @@ It is therefore required for the csv file to adhere to the following conventions
 
 
 
+
 ### Database Table
 
 #### Table Name
@@ -90,7 +91,7 @@ DB = Sequel.connect(:adapter  =>'mysql',
                     :user     =>'root', 
                     :password =>'xxx')
 
-
+# Create database table
 unless DB.table_exists?(:dna)
   DB.create_table :dna do
     primary_key :id, :allow_null => false
@@ -109,6 +110,7 @@ end
 * Data types:   Match the valid types (string, integer, float, etc.) of the csv data.
 * String hash   Required additional column for storing a unique hash that is used to identify duplicate data entries.
 
+
 2) Initializing CSVTable object
 
 ~~~ ruby
@@ -118,6 +120,7 @@ table = CSVTable.new(path/to/DNA@check.csv)
 table.executed?
 # => false
 ~~~
+
 
 3) Inserting csv data into the database 
 
@@ -133,6 +136,7 @@ puts DB[:dna].all
 # {:id=>3, :item=>3,   :description=>nil,                           :price=>34.1, :hash=>"c1fc89[...]5ef"}
 # {:id=>4, :item=>4,   :description=>"alles komplett",              :price=>23.0, :hash=>"c1fc89[...]5ef"}
 ```
+
 
 4) Preventing duplicate data entry
 
