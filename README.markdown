@@ -74,30 +74,29 @@ Note:
 * Every field is missing a value at different positions.
 
 1) Create a database table using [Sequel](http://sequel.rubyforge.org/) ORM
-    ```ruby
-    require "sequel"
+``` ruby
+require "sequel"
 
-    # Connect to MySQL database (many other databases supported by Sequel)
-    # (sudo apt-get install libmysqlclient-dev)
-    # (gem install mysqlplus)
-    DB = Sequel.connect(:adapter  =>'mysql', 
-                        :host     =>'localhost', 
-                        :database =>'sequencing', 
-                        :user     =>'root', 
-                        :password =>'xxx')
+# Connect to MySQL database (many other databases supported by Sequel)
+# (sudo apt-get install libmysqlclient-dev)
+# (gem install mysqlplus)
+DB = Sequel.connect(:adapter  =>'mysql', 
+                    :host     =>'localhost', 
+                    :database =>'sequencing', 
+                    :user     =>'root', 
+                    :password =>'xxx')
 
 
-    unless DB.table_exists?(:dna)
-      DB.create_table :dna do
-        primary_key :id, :allow_null => false
-        Integer     :item
-        String      :description
-        Float       :price
-        String      :hash
-        index       :hash
-      end
-    end
-    ```
+unless DB.table_exists?(:dna)
+  DB.create_table :dna do
+    primary_key :id, :allow_null => false
+    Integer     :item
+    String      :description
+    Float       :price
+    String      :hash
+  end
+end
+```
 Notes:
 * Table name:   Matches the prefix of the csv file name. The table name is given in lowercase.
 * Column names: Match the names of the headers. Column names are given in lowercase.
@@ -105,13 +104,13 @@ Notes:
 * String hash   Required additional column for storing a unique hash that is used to identify duplicate data entries.
 
 2) Initialize CSVTable object
-```ruby
+~~~ ruby
 table = CSVTable.new(path/to/DNA@check.csv)
 
 # Testing
 table.executed?
 # => false
-```
+~~~
 
 3) Insert csv data into database table
 ```ruby
