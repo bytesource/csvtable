@@ -4,7 +4,7 @@
 
 CSVTable reads a csv file from a given path storing its headers and fields.
 The csv data can then be entered into a corresponding database using the CSVTable#execute method.
-"Sequel":http://sequel.rubyforge.org/ is used as the ORM between CSVTable and the database.
+[Sequel](http://sequel.rubyforge.org/) is used as the ORM between CSVTable and the database.
 
 ## Conventions
 
@@ -59,44 +59,45 @@ hash of data to be added.
 
 ## Usage
 
-
-This is our sample csv file:
+#### Sample CSV File
 File name: DNA@check.csv
 Contents:
+```
 Item,Description,Price
 1, "This is a great product"
 ,"This product is not so good",23.4
 3,,34.1
 4,alles komplett,23
+```
 
 Note:
 * Every field is missing a value at different positions.
 
 1) Create a database table using [Sequel](http://sequel.rubyforge.org/) ORM:
-```ruby
-require "sequel"
+    ```ruby
+    require "sequel"
 
-# Connect to MySQL database (many other databases supported by Sequel)
-# (sudo apt-get install libmysqlclient-dev)
-# (gem install mysqlplus)
-DB = Sequel.connect(:adapter  =>'mysql', 
-                    :host     =>'localhost', 
-                    :database =>'sequencing', 
-                    :user     =>'root', 
-                    :password =>'xxx')
+    # Connect to MySQL database (many other databases supported by Sequel)
+    # (sudo apt-get install libmysqlclient-dev)
+    # (gem install mysqlplus)
+    DB = Sequel.connect(:adapter  =>'mysql', 
+                        :host     =>'localhost', 
+                        :database =>'sequencing', 
+                        :user     =>'root', 
+                        :password =>'xxx')
 
 
-unless DB.table_exists?(:dna)
-  DB.create_table :dna do
-    primary_key :id, :allow_null => false
-    Integer     :item
-    String      :description
-    Float       :price
-    String      :hash
-    index       :hash
-  end
-end
-```
+    unless DB.table_exists?(:dna)
+      DB.create_table :dna do
+        primary_key :id, :allow_null => false
+        Integer     :item
+        String      :description
+        Float       :price
+        String      :hash
+        index       :hash
+      end
+    end
+    ```
 Notes:
 * Table name:   Matches the prefix of the csv file name. The table name is given in lowercase.
 * Column names: Match the names of the headers. Column names are given in lowercase.
