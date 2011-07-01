@@ -28,11 +28,19 @@ describe CSVTable do
     end
 
     it "should raise an exception if the file has the wrong file type" do
-      @other_type = "DNA@check.txt"
+      @other_type = "/DNA@check.txt"
       @wrong_file_path = @path_to + @other_type
       lambda do
         CSVTable.new(@wrong_file_path)
-      end.should raise_error
+      end.should raise_error(Exception, "Can only read csv files")
+    end
+
+    it "should raise an exception if one or more headers are missing" do
+      @missing_header = "/DNA@missing_a_header.csv"
+      @path = @path_to + @missing_header
+      lambda do
+        CSVTable.new(@path)
+      end.should raise_error(Exception, "At least one header is missing")
     end
   end
 
