@@ -74,6 +74,7 @@ Note:
 * Every field is missing a value at different positions.
 
 1) Create a database table using [Sequel](http://sequel.rubyforge.org/) ORM
+
 ``` ruby
 require "sequel"
 
@@ -97,6 +98,7 @@ unless DB.table_exists?(:dna)
   end
 end
 ```
+
 Notes:
 * Table name:   Matches the prefix of the csv file name. The table name is given in lowercase.
 * Column names: Match the names of the headers. Column names are given in lowercase.
@@ -104,6 +106,7 @@ Notes:
 * String hash   Required additional column for storing a unique hash that is used to identify duplicate data entries.
 
 2) Initialize CSVTable object
+
 ~~~ ruby
 table = CSVTable.new(path/to/DNA@check.csv)
 
