@@ -18,11 +18,15 @@ It is therefore required for the csv file to adhere to the following conventions
 * Header names can be enclosed in quotes but don't need to.
 * Header names can be uppercase or lowercase (will be converted to lowercase).
 * Header names can consist of several words (spaces will be converted to underscores).
-* Field data can be missing or being empty (" "). 
-* Line breaks within headers or field data are not allowed. 
+* Field data can be missing or be empty (" ").
+* The following properties are not allowed:
+  * Missing headers
+  * Line breaks in headers or field data
+  * Single-column csv files
+
 
 #### Table Name
-* The file name has to be prefixed with the name of the database table, followed by a separator (default: @)
+* The file name must be prefixed with the name of the database table, followed by a separator (default: @)
 * The prefix can be both uppercase or lowercase.
 
 #### Headers
