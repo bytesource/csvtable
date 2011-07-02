@@ -35,7 +35,7 @@ class CSVTable
     data = prepare File.open(path) 
 
     @separator  = CSVTable.default_separator
-      @name       = table_name(path)
+    @name       = table_name(path)
     @headers    = extract_headers(data)
     @fields     = extract_fields(data)
 
@@ -105,9 +105,9 @@ class CSVTable
       # Valid lines are identified by having some text with a comma in between.
       next unless line.match(/.+,.+/) 
       # Remove end of line char, split at comma
-      result = line.chomp.split(/,\s*/).map do |word|
-        # Remove all quotes (\")
-        word.gsub(/"/,"")              
+      result = line.chomp.split(/\s*,\s*/).map do |word|
+        # Remove all escaped quotes (\"), strip leading and trailing whitespace
+        word.gsub(/"/,"").strip
       end
       array << result
     end

@@ -64,6 +64,17 @@ describe CSVTable do
 
       @table.send(:make_hash, data).should == test_hash
     end
+
+    it "should handle whitespace in headers and data columns" do
+      # "      Item","    Description    ","           Price            "
+      # 1,This is a great product
+      # ,"This product is not so good        ",23.4
+      # 3,,34.1
+      # 4,"          alles komplett    ",23
+      @file = "/DNA@check_a_lot_of_whitespace.csv"
+      @path = @path_to + @file
+      CSVTable.new(@path).headers.should == [:item, :description, :price] 
+    end
   end
 
 
