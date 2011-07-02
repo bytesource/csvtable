@@ -73,7 +73,19 @@ describe CSVTable do
       # 4,"          alles komplett    ",23
       @file = "/DNA@check_a_lot_of_whitespace.csv"
       @path = @path_to + @file
-      CSVTable.new(@path).headers.should == [:item, :description, :price] 
+      table = CSVTable.new(@path)
+
+      table.headers.should   == [:item, :description, :price] 
+      table.fields[1].should == [nil, "This product is not so good", 23.4] 
+    end
+
+    it "should convert whitespaces in a header to an underscore" do
+      # Item NO,Main  Description,Price Range
+      @file = "/DNA@check_with_multi_word_header.csv"
+      @path = @path_to + @file
+      table = CSVTable.new(@path)
+
+      table.headers.should == [:item_no, :main_description, :price_range]
     end
   end
 
