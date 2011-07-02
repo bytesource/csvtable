@@ -133,7 +133,6 @@ class CSVTable
         result = str_to_num(val)
         replace_if_blank(result)
       end
-
       values << nil if values.size < @headers.size
       values
     end
@@ -170,11 +169,8 @@ class CSVTable
   def fields_headers_hash fields, headers, &block
     result = fields.inject([]) do |acc, line|
       temp = to_hash(headers, line)
-      if block_given?
-        acc << yield(temp)
-      else
-        acc << temp
-      end
+
+      block_given? ? acc << yield(temp) : acc << temp
     end
     result 
   end
