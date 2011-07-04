@@ -6,8 +6,8 @@ require File.expand_path('../lib/csvtable')
 describe CSVTable do
 
   before(:each) do
-    @file = "/DNA@check.csv"
-    @path_to = File.expand_path('tables/')
+    @file = "DNA@check.csv"
+    @path_to = File.join(File.expand_path('tables'), '/')
     @path = @path_to + @file
     # Item,Description,Price
     # 1, "This is a great product"
@@ -28,7 +28,7 @@ describe CSVTable do
     end
 
     it "should raise an exception if the file has the wrong file type" do
-      @other_type = "/DNA@check.txt"
+      @other_type = "DNA@check.txt"
       @wrong_file_path = @path_to + @other_type
       lambda do
         CSVTable.new(@wrong_file_path)
@@ -37,7 +37,7 @@ describe CSVTable do
 
     it "should raise an exception if one or more headers are missing" do
       # Not sure how to implement this feature.
-      @missing_header = "/DNA@missing_a_header.csv"
+      @missing_header = "DNA@missing_a_header.csv"
       @path = @path_to + @missing_header
       lambda do
         CSVTable.new(@path)
@@ -53,7 +53,7 @@ describe CSVTable do
     end
 
     it "should raise an exception if the separator is given without a prefix (or only contains whitespace)" do
-      @separator_without_prefix = "/  @check.csv"
+      @separator_without_prefix = "  @check.csv"
       @path = @path_to + @separator_without_prefix
       lambda do
         CSVTable.new(@path)
@@ -61,7 +61,7 @@ describe CSVTable do
     end
 
     it "should use the file name as the table name if the separator is not given" do
-      @no_separator = "/NoSeparator.csv"
+      @no_separator = "NoSeparator.csv"
       @path = @path_to + @no_separator
       table = CSVTable.new(@path)
 
@@ -69,7 +69,7 @@ describe CSVTable do
     end
 
     it "it should convert whitespace and hyphens into underscore before setting @name" do
-      @space_hyphens = "/I have Space - - and hyphens.csv"
+      @space_hyphens = "I have Space - - and hyphens.csv"
       @path = @path_to + @space_hyphens
       table = CSVTable.new(@path)
 
@@ -96,7 +96,7 @@ describe CSVTable do
       # ,"This product is not so good        ",23.4
       # 3,,34.1
       # 4,"          alles komplett    ",23
-      @file = "/DNA@check_a_lot_of_whitespace.csv"
+      @file = "DNA@check_a_lot_of_whitespace.csv"
       @path = @path_to + @file
       table = CSVTable.new(@path)
 
@@ -106,7 +106,7 @@ describe CSVTable do
 
     it "should convert whitespaces and hyphens in a header to an underscore" do
       # Item  -- NO,Main  Description,Price -Range
-      @file = "/DNA@check_with_multi_word_header.csv"
+      @file = "DNA@check_with_multi_word_header.csv"
       @path = @path_to + @file
       table = CSVTable.new(@path)
 
@@ -139,7 +139,7 @@ describe CSVTable do
 
       # Using before(:all) instead of before(:each), to avoid repeated initialization of 'DB'
       # @table from above is not recognized anymore. Therefore I had to create another CSVTable object:
-      # @file = "/DNA@check.csv"
+      # @file = "DNA@check.csv"
       # @path_to = File.expand_path('tables/')
       # @path = @path_to + @file
 
@@ -173,7 +173,7 @@ describe CSVTable do
       end
 
       it "should also handle headers enclosed in quotes" do
-        @file = "/DNA@headers_with_quotes.csv"
+        @file = "DNA@headers_with_quotes.csv"
         @path = @path_to = @file
         lambda do
           @table.execute DB
@@ -210,7 +210,7 @@ describe CSVTable do
 
       it "should not allow to enter the same data again from another file with a different name" do
         @table.execute DB
-        @exact_copy = "/DNA@exact_copy.csv"
+        @exact_copy = "DNA@exact_copy.csv"
         @new_path   = @path_to + @file
         @table2 = CSVTable.new(@new_path)
         lambda do
