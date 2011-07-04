@@ -17,7 +17,7 @@ It is therefore required for the csv file to adhere to the following conventions
 
 * Header names can be enclosed in quotes but don't need to.
 * Header names can be uppercase or lowercase (will be converted to lowercase).
-* Header names can consist of several words (spaces will be converted to underscores).
+* Header names can consist of several words (whitespace and hyphens will be converted to underscores).
 * Field data can be missing or be empty (" ").
 * The following properties are not allowed:
   * Missing headers

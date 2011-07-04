@@ -128,7 +128,7 @@ class CSVTable
 
 
   def formatr word
-    word.gsub(/\s+/, "_").downcase.to_sym
+    word.gsub(/[-\s]+/, "_").downcase.to_sym
   end
 
 

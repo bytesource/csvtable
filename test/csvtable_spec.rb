@@ -104,8 +104,8 @@ describe CSVTable do
       table.fields[1].should == [nil, "This product is not so good", 23.4] 
     end
 
-    it "should convert whitespaces in a header to an underscore" do
-      # Item NO,Main  Description,Price Range
+    it "should convert whitespaces and hyphens in a header to an underscore" do
+      # Item  -- NO,Main  Description,Price -Range
       @file = "/DNA@check_with_multi_word_header.csv"
       @path = @path_to + @file
       table = CSVTable.new(@path)
