@@ -27,6 +27,7 @@ It is therefore required for the csv file to adhere to the following conventions
 
 #### Table Name
 * The file name must be prefixed with the name of the database table, followed by a separator (default: @)
+* If no separator is given, the table name defaults to the file name.
 * The prefix can be both uppercase or lowercase.
 
 #### Headers

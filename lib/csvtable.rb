@@ -88,14 +88,15 @@ class CSVTable
 
 
   # Pattern
-  # path/to/file/TableName_FileName.csv --> tablename
+  # path/to/file/TableName@FileName.csv --> :tablename
   def table_name path
-    # 1) match:    --> /TableName_
-    # 2) gsub:     --> TableName
-    # 3) downcase: --> tablename
-    # 4) to_sym:   --> :tablename
-    regex = Regexp.new("\/[^\/]+#{@separator}")
-    path.match(regex)[0].gsub(/^.|.$/,'').downcase.to_sym
+    dir, file       = File.split(path)
+    prefix, postfix = file.split(@separator)
+    raise Exception, "No table name given!" if blank?(prefix)
+    # If no separator was given, the 'prefix' will be set to the contents of 'file', unaltered.
+    # If a separator was given, 'prefix.split('.') will just set 'name' to the content of 'prefix', unaltered. 
+    name, filetype = prefix.split('.')
+    name.gsub(/[-\s]+/, '_').downcase.to_sym 
   end
 
 

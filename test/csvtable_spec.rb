@@ -36,6 +36,7 @@ describe CSVTable do
     end
 
     it "should raise an exception if one or more headers are missing" do
+      # Not sure how to implement this feature.
       @missing_header = "/DNA@missing_a_header.csv"
       @path = @path_to + @missing_header
       lambda do
@@ -45,12 +46,36 @@ describe CSVTable do
   end
 
 
-
   describe "instance variables" do
 
     it "should have the right name" do
       @table.name.should == :dna
     end
+
+    it "should raise an exception if the separator is given without a prefix (or only contains whitespace)" do
+      @separator_without_prefix = "/  @check.csv"
+      @path = @path_to + @separator_without_prefix
+      lambda do
+        CSVTable.new(@path)
+      end.should raise_error(Exception, "No table name given!")
+    end
+
+    it "should use the file name as the table name if the separator is not given" do
+      @no_separator = "/NoSeparator.csv"
+      @path = @path_to + @no_separator
+      table = CSVTable.new(@path)
+
+      table.name.should == :noseparator
+    end
+
+    it "it should convert whitespace and hyphens into underscore before setting @name" do
+      @space_hyphens = "/I have Space - - and hyphens.csv"
+      @path = @path_to + @space_hyphens
+      table = CSVTable.new(@path)
+
+      table.name.should == :i_have_space_and_hyphens
+    end
+
 
     it "should set @executed to 'false'" do
       @table.executed.should == false
