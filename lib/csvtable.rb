@@ -93,10 +93,14 @@ class CSVTable
     dir, file       = File.split(path)
     prefix, postfix = file.split(@separator)
     raise Exception, "No table name given!" if blank?(prefix)
-    # If no separator was given, the 'prefix' will be set to the contents of 'file', unaltered.
-    # If a separator was given, 'prefix.split('.') will just set 'name' to the content of 'prefix', unaltered. 
-    name, filetype = prefix.split('.')
-    name.gsub(/[-\s]+/, '_').downcase.to_sym 
+
+    if prefix.match(/\./)
+      # There was nothing to split avove (separator not given),
+      # to we got back the filename (xxx.type), unaltered.
+      prefix, filetype = prefix.split('.')
+    end
+
+    prefix.gsub(/[-\s]+/, '_').downcase.to_sym 
   end
 
 
