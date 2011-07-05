@@ -160,7 +160,6 @@ table2.execute DB
 
 ## Afterword
 
-This is my first attempt at programming in Ruby the code and it probably shows.
-Nevertheless, I am determined to constantly improve and especially learn from the many great coders out there.
-That's why I _highly_ appreciate _any_ suggestions that might help me make my code more idiomatic and robust.
+This is my first attempt at programming in Ruby and it probably shows. For example, although typical Ruby makes heavy use of blocks, most of my instance method don't take a block parameter.
+However, I am eager to constantly improve and therefore highly appreciate *any* suggestions that might help me make my code more idiomatic and robust.
 
