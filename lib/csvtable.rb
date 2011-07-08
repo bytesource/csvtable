@@ -50,22 +50,24 @@ class CSVTable
 
 
   def execute connection, name=nil
-    raise Exception, "Data already copied to table #{@name}!" if @executed
+    begin
+      raise Exception, "Data already copied to table #{@name}!" if @executed
 
-    name ||= @name
-    # Create a dataset
-    dataset = connection[name]
-    data  = fields_headers_hash(@fields, @headers) {|row| row.merge(:hash => @data_hash)}
+      name ||= @name
+      # Create a dataset
+      dataset = connection[name]
+      data  = fields_headers_hash(@fields, @headers) {|row| row.merge(:hash => @data_hash)}
 
-
-
-    raise Exception, "Data already in table. Abort!" if data_already_in_table? dataset
-    # Populate the table
-    data.map do |row|
-      insert_data(dataset, row)
+      raise Exception, "Data already in table. Abort!" if data_already_in_table? dataset
+      # Populate the table
+      data.map do |row|
+        dataset.insert(row)
+      end
+      # $! = Global variable set to the last exception raised.
+      @executed = true unless $!
+    ensure
+      # connection.disconnect
     end
-    # $! = Global variable set to the last exception raised.
-    @executed = true unless $!
   end
 
   def executed?
@@ -79,11 +81,6 @@ class CSVTable
     stored_hashes = dataset.map {|row| row[:hash]}
 
     stored_hashes.find {|value| value == @data_hash}
-  end
-
-  # Expects a Sequel dataset
-  def insert_data dataset, data_row
-    dataset.insert(data_row)
   end
 
 

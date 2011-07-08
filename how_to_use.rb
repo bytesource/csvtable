@@ -53,3 +53,5 @@ puts "Pulling all data:"
 puts DB[:dna].all
 puts "Headers: #{table.headers}"
 puts "Fields[1]: #{table.fields[1]}"
+
+puts "Close connection" 
