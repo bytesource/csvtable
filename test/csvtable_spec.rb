@@ -124,13 +124,14 @@ describe CSVTable do
 
     it "'fields_headers_hash' should convert an array of arrays into an array of hashes" do
 
-      @array = [ ["apple", "It's delicious", 23.3] ] 
-
-      result = @table.send(:fields_headers_hash, @array, @table.headers) {|row| row.merge(:hash => @table.data_hash)}
+      array     = @table.fields[0] 
+      result    = @table.send(:fields_headers_hash) {|row| row.merge(:hash => @table.data_hash)}
       
-      hash = {:hash => @table.data_hash}
-      with_hash = [] <<  {:item=>"apple", :description=>"It's delicious", :price=>23.3}.merge(hash)
-      result.should == with_hash
+      hash      = {:hash => @table.data_hash}
+      zip_array = @table.headers.zip(array)
+      with_hash = Hash[*zip_array.flatten].merge(hash)
+
+      result[0].should == with_hash
     end
   end
 

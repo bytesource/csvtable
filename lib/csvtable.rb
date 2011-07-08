@@ -56,7 +56,9 @@ class CSVTable
       name ||= @name
       # Create a dataset
       dataset = connection[name]
-      data  = fields_headers_hash(@fields, @headers) {|row| row.merge(:hash => @data_hash)}
+      data    = fields_headers_hash do |row| 
+        row.merge(:hash => @data_hash)
+      end
 
       raise Exception, "Data already in table. Abort!" if data_already_in_table? dataset
       # Populate the table
@@ -168,9 +170,9 @@ class CSVTable
 
   #  [ ["apple", "It's delicious", 23.3] ]
   #  => [ {:item=>"apple", :description=>"It's delicious", :price=>23.3} ]
-  def fields_headers_hash fields, headers, &block
-    result = fields.inject([]) do |acc, line|
-      temp = to_hash(headers, line)
+  def fields_headers_hash &block
+    result = @fields.inject([]) do |acc, line|
+      temp = to_hash(@headers, line)
 
       block_given? ? acc << yield(temp) : acc << temp
     end
