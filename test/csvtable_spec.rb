@@ -181,6 +181,16 @@ describe CSVTable do
           @table.executed?.should be_true
         end.should_not raise_error
       end
+
+      it "should work with a custom delimiter" do
+        @file = "DNA@check_semicolon_delimiter.csv"
+        @path = @path_to + @file
+        my_table = CSVTable.new(@path, :delimiter => ';')
+        lambda do
+          my_table.execute DB
+          my_table.executed?.should be_true
+        end.should_not raise_error
+      end
     end
 
     describe "on failure: " do

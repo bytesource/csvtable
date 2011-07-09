@@ -14,6 +14,9 @@ check_path = csv_path + "DNA@check.csv"
 
 table = CSVTable.new(check_path)
 
+
+puts "Delimiter: #{table.delimiter}"
+
 # Opening a connection
 require "sequel"
 
@@ -55,3 +58,4 @@ puts "Headers: #{table.headers}"
 puts "Fields[1]: #{table.fields[1]}"
 
 puts "Close connection" 
+

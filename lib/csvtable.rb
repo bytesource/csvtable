@@ -19,22 +19,26 @@ end
 
 class CSVTable
   attr_accessor :name
-  attr_reader   :headers, :fields, :data_hash, :executed
+  attr_reader   :headers, :fields, :data_hash, :executed, :delimiter
 
   @default_separator = "@"
+  @default_delimiter = ","
 
   # Class methods are singleton methods on a CLASS OBJECT.
   class << self
     attr_accessor :default_separator
+    attr_accessor :default_delimiter
   end
 
-  def initialize path
+  def initialize path, options = {}
     raise ArgumentError, "File does not exist!" unless File.exists?( path )
     raise Exception, "Can only read csv files" unless can_read?( path)
 
+    @separator  = options[:separator] || CSVTable.default_separator
+    @delimiter  = options[:delimiter] || CSVTable.default_delimiter
+
     data = prepare File.open(path) 
 
-    @separator  = CSVTable.default_separator
     @name       = table_name(path)
     @headers    = extract_headers(data)
     @fields     = extract_fields(data)
@@ -106,10 +110,14 @@ class CSVTable
   def prepare file
     array = []
     file.each_line do |line|
-      # Valid lines are identified by having some text with a comma in between.
-      next unless line.match(/.+,.+/) 
-      # Remove end of line char, split at comma
-      result = line.chomp.split(/\s*,\s*/).map do |word|
+      # Valid lines are identified by having some text with @delimiter in between.
+      # Why use regex.source:
+      # http://stackoverflow.com/questions/2648054/ruby-recursive-regex
+      get_line = Regexp.new(".+#{@delimiter}.+")
+      next unless line.match(/#{get_line.source}/) 
+      # Remove end of line char, split at @delimiter
+      get_word = Regexp.new("\s*#{@delimiter}\s*")
+      result = line.chomp.split(/#{get_word.source}/).map do |word|
         # Remove all escaped quotes (\"), strip leading and trailing whitespace
         word.gsub(/"/,"").strip
       end
