@@ -166,13 +166,13 @@ class CSVTable
   end
 
 
-  def str_to_num num_as_string
-    if num_as_string.is_i?
-      num_as_string.to_i
-    elsif num_as_string.is_f?
-      num_as_string.to_f
+  def str_to_num s
+    if s.is_i?
+      s.to_i
+    elsif s.is_f?
+      s.to_f
     else
-      num_as_string
+      s
     end
   end
 
