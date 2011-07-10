@@ -3,12 +3,12 @@ require 'digest'
 class String
   # Checks if String represents an Integer.
   def is_i?
-    !!(self =~ /^[-+]?[0-9]+$/)
+    !!(self =~ /^[-+]?[0-9,]+$/)
   end
 
   # Checks if String represents a Float.
   def is_f?
-    !!(self =~ /^[-+]?[0-9]+\.[0-9]+$/)
+    !!(self =~ /^[-+]?[0-9,]+\.[0-9]+$/)
   end
 
   def is_n?
