@@ -113,6 +113,13 @@ describe CSVTable do
       table.headers.should == [:item_no, :main_description, :price_range]
     end
 
+    it "should verify that the delimiter recognized by CSVTable and the delimiter of the csv file match" do
+      lambda do
+        table = CSVTable.new(@path, :delimiter => ";")
+      end.should raise_error(Exception, "Delimiter ';' not found in header row.")
+    end
+
+
     # it "should handle numbers containing comma separators correctly" do
     #   # "34,456","34,000",345,34.45
     #   @file = "MATH@with_comma_in_number.csv"

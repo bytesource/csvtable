@@ -99,8 +99,8 @@ class CSVTable
     raise Exception, "No table name given!" if blank?(prefix)
 
     if prefix.match(/\./)
-      # There was nothing to split avove (separator not given),
-      # to we got back the filename (xxx.type), unaltered.
+      # There was nothing to split above (separator not given),
+      # so we got back the filename (xxx.type), unaltered.
       prefix, filetype = prefix.split('.')
     end
 
@@ -129,11 +129,19 @@ class CSVTable
 
 
   def extract_headers raw_data
-    raw_data[0].map do |header|
+    header_row = raw_data[0]
+    raise Exception, "Delimiter '#{@delimiter}' not found in header row." unless delimiter_found? header_row
+
+    header_row.map do |header|
       formatr(header)
     end
   end
 
+  def delimiter_found? data
+    # data.nil? -> no matching delimiter found in any row, so nothing was parsed in 'prepare'
+    # data.size == 1 -> delimiter found inside a data field, so some data, albeit wrong, was returned.
+    !(data.nil? || data.size == 1)
+  end
 
   def formatr word
     word.gsub(/[-\s]+/, "_").downcase.to_sym
