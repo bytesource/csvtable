@@ -15,8 +15,6 @@ check_path = csv_path + "DNA@check.csv"
 table = CSVTable.new(check_path)
 
 
-puts "Delimiter: #{table.delimiter}"
-
 # Opening a connection
 require "sequel"
 
@@ -56,6 +54,14 @@ puts "Pulling all data:"
 puts DB[:dna].all
 puts "Headers: #{table.headers}"
 puts "Fields[1]: #{table.fields[1]}"
+puts "Delimiter: #{table.delimiter}"
 
-puts "Close connection" 
 
+CSVTable.default_delimiter = ";"
+check_path2 = csv_path + "DNA@check_semicolon_delimiter.csv"
+
+my_table = CSVTable.new(check_path2)
+puts my_table.delimiter
+
+your_table = CSVTable.new(check_path, :delimiter => ",")
+puts your_table.delimiter

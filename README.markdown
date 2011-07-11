@@ -158,6 +158,33 @@ table2.execute DB
 # Exception: Data already in table. Abort!
 ```
 
+5) Some options for customization
+
+Custom delimiter
+If there are one or more commas inside the data fields, the csv file has to be saved using a different delimiter, such as a semicolon.
+CSVTable uses as comma as the default delimiter, but you can choose a custom delimiter like so:
+
+```ruby
+# Setting custom delimiter for all instances of CSVTable:
+CSVTable.default_delimiter = ";"
+
+table = CSVTable.new('path')
+table.delimiter
+# => ;
+
+# Setting customer delimiter for a single object:
+table2 = CSVTable.new('path', :delimiter => '|')
+
+table2.delimiter
+# => |
+```
+
+**Notes**: 
+
+* A custom file name separator can be chosen in the same way.
+* In order to avoid mistakes, choosing a custom delimiter or separator has to be made explicit on creation of an object. Changing the value on the fly using an instance method is not possible.
+
+
 ## Afterword
 
 This is my first attempt at programming in Ruby and it probably shows. For example, although typical Ruby makes heavy use of blocks, most of my instance method don't take a block parameter.

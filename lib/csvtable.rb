@@ -18,8 +18,9 @@ end
 
 
 class CSVTable
-  attr_accessor :name
-  attr_reader   :headers, :fields, :data_hash, :executed, :delimiter
+  attr_reader :headers, :fields 
+  attr_reader :data_hash, :executed 
+  attr_reader :delimiter, :name
 
   @default_separator = "@"
   @default_delimiter = ","
