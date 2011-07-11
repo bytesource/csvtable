@@ -50,7 +50,7 @@ class CSVTable
 
 
   def can_read? path
-    !!(/.*\.csv/ =~ path)
+    !!(/.*\.csv$/ =~ path)
   end
 
 
