@@ -168,15 +168,23 @@ CSVTable uses as comma as the default delimiter, but you can choose a custom del
 # Setting custom delimiter for all instances of CSVTable:
 CSVTable.default_delimiter = ";"
 
-table = CSVTable.new('path')
+with_semicolon = "path/to/DNA@check_sc.csv"
+
+table = CSVTable.new('with_semicolon')
 table.delimiter
 # => ;
 
 # Setting customer delimiter for a single object:
-table2 = CSVTable.new('path', :delimiter => '|')
+with_vertical_bar = "path/to/DNA@check_vb.csv"
 
+table2 = CSVTable.new('with_vertical_bar', :delimiter => '|')
 table2.delimiter
 # => |
+
+# Using the wrong delimiter
+table3 = CSVTable.new('with_vertical_bar', :delimiter => ";")
+# Exception: Delimiter ';' not found in header row. 
+
 ```
 
 **Notes**: 
