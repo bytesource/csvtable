@@ -17,6 +17,7 @@ describe CSVTable do
     @table = CSVTable.new(@path)
   end
 
+
   describe "Opening a file: " do
 
     it "should raise an exception if the file does not exist" do
@@ -26,6 +27,7 @@ describe CSVTable do
         # http://stackoverflow.com/questions/1722749/how-to-use-rspecs-should-raise-with-any-kind-of-exception
       end.should raise_error
     end
+
 
     it "should raise an exception if the file has the wrong file type" do
       @other_type = "DNA@check.txt"
@@ -52,6 +54,7 @@ describe CSVTable do
       @table.name.should == :dna
     end
 
+
     it "should raise an exception if the separator is given without a prefix (or only contains whitespace)" do
       @separator_without_prefix = "  @check.csv"
       @path = @path_to + @separator_without_prefix
@@ -60,13 +63,15 @@ describe CSVTable do
       end.should raise_error(Exception, "No table name given!")
     end
 
+
     it "should use the file name as the table name if the separator is not given" do
       @no_separator = "NoSeparator.csv"
       @path = @path_to + @no_separator
-      table = CSVTable.new(@path)
+        table = CSVTable.new(@path)
 
       table.name.should == :noseparator
     end
+
 
     it "it should convert whitespace and hyphens into underscore before setting @name" do
       @space_hyphens = "I have Space - - and hyphens.csv"
@@ -81,6 +86,7 @@ describe CSVTable do
       @table.executed.should == false
     end
 
+
     it "should set @data_hash to the correct hash value" do
 
       data = @table.fields.to_s
@@ -89,6 +95,7 @@ describe CSVTable do
 
       @table.send(:make_hash, data).should == test_hash
     end
+
 
     it "should handle whitespace in headers and data columns" do
       # "      Item","    Description    ","           Price            "
@@ -104,6 +111,7 @@ describe CSVTable do
       table.fields[1].should == [nil, "This product is not so good", 23.4] 
     end
 
+
     it "should convert whitespaces and hyphens in a header to an underscore" do
       # Item  -- NO,Main  Description,Price -Range
       @file = "DNA@check_with_multi_word_header.csv"
@@ -113,11 +121,26 @@ describe CSVTable do
       table.headers.should == [:item_no, :main_description, :price_range]
     end
 
+
     it "should verify that the delimiter recognized by CSVTable and the delimiter of the csv file match" do
       lambda do
         table = CSVTable.new(@path, :delimiter => ";")
       end.should raise_error(Exception, "Delimiter ';' not found in header row.")
     end
+
+
+    it "should handle data fields containing a delimiter correctly, 
+        if the delimiter does have at least one whitespace before or after it" do
+      # Item,Description,Price
+      # 1,"This, is ,a great , product"
+      # ...
+      @file = "DNA@with_allowed_whitespace_in_data.csv"
+      @path = @path_to + @file
+      lambda do
+        table = CSVTable.new(@path)
+        table.fields[0].should == [1, "This, is ,a great , product", nil]
+      end.should_not raise_error
+        end
 
 
     # it "should handle numbers containing comma separators correctly" do
@@ -140,9 +163,10 @@ describe CSVTable do
       @table.send(:replace_if_blank, "    ").should == nil
     end
 
+
     it "'prepare' should return the correct value" do
       result = @table.send(:prepare, File.open(@path))
-      
+
       result[0].should == ["Item", "Description", "Price"]
       result[1].should == ["1", "This is a great product"]
       result[2].should == ["", "This product is not so good", "23.4"]
@@ -150,17 +174,19 @@ describe CSVTable do
       result[4].should == ["4", "alles komplett", "23"]
     end
 
+
     it "'fields_headers_hash' should convert an array of arrays into an array of hashes" do
 
       array     = @table.fields[0] 
       result    = @table.send(:fields_headers_hash) {|row| row.merge(:hash => @table.data_hash)}
-      
+
       hash      = {:hash => @table.data_hash}
       zip_array = @table.headers.zip(array)
       with_hash = Hash[*zip_array.flatten].merge(hash)
 
       result[0].should == with_hash
     end
+
 
     it "'str_to_num' should convert a string representing a number into its corresponding int or float, 
         and leave it untouched otherwise" do
@@ -169,8 +195,9 @@ describe CSVTable do
       @table.send(:str_to_num, "23000").should == 23000
       @table.send(:str_to_num, "23000.234").should == 23000.234
       @table.send(:str_to_num, "-23000.234").should == -23000.234
-    end
+        end
   end
+
 
   describe "insert data into database: " do
     before(:each) do
@@ -195,8 +222,8 @@ describe CSVTable do
         Float       :price
         String      :hash
       end
-
     end
+
 
     describe "on success" do
 
@@ -205,10 +232,12 @@ describe CSVTable do
         DB[@table.name].count.should == 4
       end
 
+
       it "should set @executed to 'true'" do
         @table.execute DB
         @table.executed?.should be_true
       end
+
 
       it "should also handle headers enclosed in quotes" do
         @file = "DNA@headers_with_quotes.csv"
@@ -219,6 +248,7 @@ describe CSVTable do
         end.should_not raise_error
       end
 
+
       it "should work with a custom delimiter" do
         @file = "DNA@check_semicolon_delimiter.csv"
         @path = @path_to + @file
@@ -228,9 +258,40 @@ describe CSVTable do
           my_table.executed?.should be_true
         end.should_not raise_error
       end
-    end
 
-    describe "on failure: " do
+
+      it "should handle data fields containing a delimiter correctly, 
+        if the delimiter does have at least one whitespace before or after it" do
+        # Item,Description,Price
+        # 1,"This, is ,a great , product"
+        # ...
+        @file = "DNA@with_allowed_whitespace_in_data.csv"
+        @path = @path_to + @file
+        table = CSVTable.new(@path)
+
+        table.fields[0].should == [1, "This, is ,a great , product", nil]
+        lambda do
+          table.execute DB
+          table.executed?.should be_true
+        end.should_not raise_error
+        end
+
+
+      it "should throw an exception if there is a delimiter in a data field not surrounded by any whitespace" do
+        # Item,Description,Price
+        # 1,"This,is a great,product"
+        # ...
+        @file = "DNA@with_forbidden_whitespace_in_data.csv"
+        @path = @path_to + @file
+
+        lambda do
+          table = CSVTable.new(@path)
+        end.should raise_error(Exception, "Header and data field mismatch. Check for forbidden delimiters in data fields.")
+        # NOTE: If the last data field of a row is empty (that means one delimiter missing) and a single forbidden delimiter
+        # found in one of the data fields of the same row, no exception will be thrown, as there will be no mismatch in the 
+        # size of the header and data row.
+      end
+
 
       it "one instance should only be able to insert the data once" do
         @table.execute DB
@@ -240,12 +301,14 @@ describe CSVTable do
         end.should raise_error(Exception, "Data already copied to table #{@table.name}!")
       end
 
+
       it "should NOT set @executed to 'true' if an exception is raised during data entry" do
         lambda do
           @table.execute DB, :test  # wrong table name
         end.should raise_error
-        @table.executed?.should_not be_true
+          @table.executed?.should_not be_true
       end
+
 
       it "should not allow another instance to insert the same data" do
         @table.execute DB
@@ -255,6 +318,7 @@ describe CSVTable do
           DB[@table.name].count.should == 4
         end.should raise_error(Exception, "Data already in table. Abort!")
       end
+
 
       it "should not allow to enter the same data again from another file with a different name" do
         @table.execute DB
@@ -266,6 +330,10 @@ describe CSVTable do
           DB[@table.name].count.should == 4
         end.should raise_error(Exception, "Data already in table. Abort!")
       end
+    end
+
+    describe "on failure: " do
+
     end
   end
 end

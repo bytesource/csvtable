@@ -117,7 +117,8 @@ class CSVTable
       get_line = Regexp.new(".+#{@delimiter}.+")
       next unless line.match(/#{get_line.source}/) 
       # Remove end of line char, split at @delimiter
-      result = line.chomp.split(/#{@delimiter}/).map do |word|
+      get_word = Regexp.new("(?<! )#{@delimiter}(?! )")
+      result = line.chomp.split(/#{get_word.source}/).map do |word|
         # Remove all escaped quotes (\"), strip leading and trailing whitespace
         word.gsub(/"/,"").strip
       end
@@ -154,6 +155,9 @@ class CSVTable
         replace_if_blank(result)
       end
       values << nil if values.size < @headers.size
+
+      msg = "Header and data field mismatch. Check for forbidden delimiters in data fields." 
+      raise Exception, msg unless values.size == @headers.length
       values
     end
     fields

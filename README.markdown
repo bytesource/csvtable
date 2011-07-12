@@ -19,10 +19,12 @@ It is therefore required for the csv file to adhere to the following conventions
 * Header names can be uppercase or lowercase (will be converted to lowercase).
 * Header names can consist of several words (whitespace and hyphens will be converted to underscores).
 * Field data can be missing or be empty (" ").
+* There must be no whitespace between data fields and a delimiter.
 * The following properties are not allowed:
   * Missing headers
   * Line breaks in headers or field data
   * Single-column csv files
+  * Delimiters in data fields, unless every single one has a whitespace either before or after it.
 
 
 #### Table Name
