@@ -160,7 +160,8 @@ table2.execute DB
 
 5) Some options for customization
 
-Custom delimiter
+**Custom delimiter** 
+
 If there are one or more commas inside the data fields, the csv file has to be saved using a different delimiter, such as a semicolon.
 CSVTable uses as comma as the default delimiter, but you can choose a custom delimiter like so:
 
