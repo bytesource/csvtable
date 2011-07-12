@@ -67,4 +67,4 @@ your_table = CSVTable.new(check_path, :delimiter => ",")
 puts your_table.delimiter
 
 # Using the wrong delimiter
-her_table = CSVTable.new(check_path, :delimiter => ";")
+# her_table = CSVTable.new(check_path, :delimiter => ";")

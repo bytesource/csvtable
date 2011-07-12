@@ -10,7 +10,7 @@ describe CSVTable do
     @path_to = File.join(File.expand_path('tables'), '/')
     @path = @path_to + @file
     # Item,Description,Price
-    # 1, "This is a great product"
+    # 1,"This is a great product"
     # ,"This product is not so good",23.4
     # 3,,34.1
     # 4,alles komplett,23

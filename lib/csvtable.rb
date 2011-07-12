@@ -117,8 +117,7 @@ class CSVTable
       get_line = Regexp.new(".+#{@delimiter}.+")
       next unless line.match(/#{get_line.source}/) 
       # Remove end of line char, split at @delimiter
-      get_word = Regexp.new("\s*#{@delimiter}\s*")
-      result = line.chomp.split(/#{get_word.source}/).map do |word|
+      result = line.chomp.split(/#{@delimiter}/).map do |word|
         # Remove all escaped quotes (\"), strip leading and trailing whitespace
         word.gsub(/"/,"").strip
       end
