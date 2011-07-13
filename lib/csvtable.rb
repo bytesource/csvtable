@@ -149,7 +149,7 @@ class CSVTable
 
 
   def extract_fields raw_data
-    fields = raw_data.drop(1).map do |row|
+    raw_data.drop(1).map do |row|
       values = row.map do |val|
         result = str_to_num(val)
         replace_if_blank(result)
@@ -160,7 +160,6 @@ class CSVTable
       raise Exception, msg unless values.size == @headers.length
       values
     end
-    fields
   end
 
 
