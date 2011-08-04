@@ -20,16 +20,16 @@ require "sequel"
 
 # http://sequel.rubyforge.org/rdoc/files/doc/cheat_sheet_rdoc.html
 # Open an SQLite memory database
-DB = Sequel.sqlite
+# DB = Sequel.sqlite
 
 # Connectiong to MYSQL
 # (sudo apt-get install libmysqlclient-dev)
 # (gem install mysqlplus)
-# DB = Sequel.connect(:adapter  =>'mysql', 
-#                     :host     =>'localhost', 
-#                     :database =>'plastronics', 
-#                     :user     =>'root', 
-#                     :password =>'xxx')
+DB = Sequel.connect(:adapter  =>'mysql', 
+                    :host     =>'localhost', 
+                    :database =>'plastronics', 
+                    :user     =>'root', 
+                    :password =>'moinmoin')
 
 # Create database table
 unless DB.table_exists?(table.name)
