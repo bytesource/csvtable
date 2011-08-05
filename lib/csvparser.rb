@@ -1,6 +1,8 @@
 require 'parslet'
 require 'pp'
 
+# Common Format and MIME Type for CSV Files (RFC 4180)
+# Source: http://www.ietf.org/rfc/rfc4180.txt
 csv_abfn = <<EOS
   file        = [header CRLF] record *(CRLF record) [CRLF]
   header      = name *(COMMA name)
