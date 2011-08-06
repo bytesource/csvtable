@@ -60,11 +60,18 @@ Terrace ""At the Plaza"" road",SomeTown,SD, 91234
 "Joan ""the bone"", Anne",Jet,"9th, at Terrace plc",Desert City,CO,00123
 CSV
 
+# pp CSVParser.new.parse_with_debug(csv_content)
+
+
+# with empty fields
 csv_content2 = <<CSV
 "col1","col2","col3","col4","col5","col6"
-1,2,3,4,5,6
+1,2,3,4.433,5,-6.43
 10,20,,,,
 CSV
+
+# pp CSVParser.new.parse(csv_content2)
+
 
 # semicolon (;) as the delimiter
 csv_content3 = <<CSV
@@ -72,10 +79,8 @@ csv_content3 = <<CSV
 1;2;3;4;5;6
 10;20;;;;
 CSV
-# pp CSVParser.new.parse_with_debug(csv_content)
-# pp CSVParser.new.parse(csv_content2)
 
-pp CSVParser.new(';').parse(csv_content3)
+# pp CSVParser.new(';').parse(csv_content3)
 
 csv_content_chinese = <<CSV
 "编码","规格","单价（美元）","数量","总价（美元）"
@@ -85,5 +90,68 @@ csv_content_chinese = <<CSV
 CSV
 
 pp CSVParser.new.parse(csv_content_chinese)
+# [{:row=>
+#    [{:column=>"\"编码\""@0},
+#     {:column=>"\"规格\""@9},
+#     {:column=>"\"单价（美元）\""@18},
+#     {:column=>"\"数量\""@39},
+#     {:column=>"\"总价（美元）\""@48}]},
+#  {:row=> ...
+
+
+# ===============================================
+# Transforming the output of the parser
+
+class String
+
+  def clean_up
+    self.gsub(/"/,"")
+  end
+    
+
+  def is_i?
+    !!(self =~ /^[-+]?[0-9,]+$/)
+  end
+
+  # Checks if String represents a Float.
+  def is_f?
+    !!(self =~ /^[-+]?[0-9,]+\.[0-9]+$/)
+  end
+
+  def to_num
+    if self.is_f?
+      self.to_f
+    elsif self.is_i?
+      self.to_i
+    else
+      self
+    end
+  end
+end
+
+
+class CSVTransform < Parslet::Transform
+  
+  rule(:column => subtree(:string)) do
+    if string.is_a?(Array)
+      nil
+    else
+      puts string.class
+      String.new(string).clean_up.to_num
+    end
+  end
+
+  rule(:row => subtree(:array)) {array}
+end
+
+tree = CSVParser.new.parse(csv_content2)
+transform = CSVTransform.new.apply(tree)
+pp transform
+# [["col1", "col2", "col3", "col4", "col5", "col6"],
+#  [1, 2, 3, 4.433, 5, -6.43],
+#  [10, 20, nil, nil, nil, nil]]
+
+
+
 
 
