@@ -108,7 +108,6 @@ class String
     self.gsub(/"/,"")
   end
     
-
   def is_i?
     !!(self =~ /^[-+]?[0-9,]+$/)
   end
@@ -137,7 +136,7 @@ class CSVTransform < Parslet::Transform
       nil
     else
       puts string.class
-      String.new(string).clean_up.to_num
+      string.to_s.clean_up.to_num
     end
   end
 
