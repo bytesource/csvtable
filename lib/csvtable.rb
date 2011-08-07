@@ -12,7 +12,7 @@ class String
   end
 
   def is_n?
-    self.is_i? || self.is_f?
+     self.is_f? || self.is_i?
   end
 end
 

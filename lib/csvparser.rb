@@ -34,10 +34,10 @@ class CSVParser < Parslet::Parser
  
   rule(:file)        {(record.as(:row) >> newline).repeat(1)}
   # rule(:file)        {record.as(:row) >> (newline >> record.as(:row)).repeat >> newline.maybe}
-  rule(:non_escaped) {textdata.repeat}
   rule(:record)      {field.as(:column) >> (comma >> field.as(:column)).repeat}
   rule(:field)       {escaped | non_escaped}
   rule(:escaped)     {d_quote >> (textdata | comma | cr | lf | d_quote >> d_quote).repeat >> d_quote}
+  rule(:non_escaped) {textdata.repeat}
   rule(:textdata)    {((comma | d_quote | cr | lf).absent? >> any).repeat(1)}
   rule(:newline)     {lf >> cr.maybe}
   rule(:lf)          {str("\n")}
