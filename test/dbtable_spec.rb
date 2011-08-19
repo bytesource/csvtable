@@ -46,11 +46,11 @@ describe "DBTable" do
 
     it "should create a database table" do
 
-      DB = @dbtable.connect
 
       codons = CodonsTable.new
+      codons.create_table
       lambda do
-        codons.create_table DB
+        codons.create_table
       end.should_not raise_error
     end
   end

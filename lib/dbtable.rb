@@ -3,32 +3,30 @@ require 'sequel'
 class DBTable
 
   class << self
-    attr_accessor :table_classes
+    attr_accessor :table_classes, :database_info
   end
 
   @table_classes = {} 
 
-  attr_accessor :connection_info
   
 
-  def initialize info
-    @connection_info = info
+  def initialize info = {}
+    DBTable.database_info = info
+    puts "info: #{info}"
+    puts "@database_info: #{@database_info}"
   end
 
   def connect
-    Sequel.connect(@connection_info)
+    Sequel.connect(DBTable.database_info)
   end
 
   def self.name
-    super.to_s.gsub!(/Table/,'').downcase.to_sym
+    super.gsub!(/Table/,'').downcase.to_sym
   end
-
-
-  
 
   def self.inherited(subclass)
     # DBTable.table_classes << subclass
-    @table_classes = DBTable.table_classes.merge(subclass.name => subclass)
+    @table_classes = self.table_classes.merge(subclass.name => subclass)
   end
   
 end
@@ -36,7 +34,7 @@ end
 
 class CodonsTable < DBTable
 
-  @table_info
+  attr_accessor :table_info, :database_info
   
 
   def initialize &block
@@ -47,13 +45,19 @@ class CodonsTable < DBTable
     String      :description
     Float       :price
     end
+
+    @database_info = DBTable.database_info
   end
 
-  def create_table connection
+  
+  def create_table
     name = CodonsTable.name
-    unless connection.table_exists?(name)
-      connection.create_table name do
-        @table_info.call
+    puts "CodonsTable, @database_info: #{@database_info}"
+    db   = connect
+    puts "create_table, @table_info: #{@table_info}"
+    unless db.table_exists?(name)
+      db.create_table name do
+        instance_eval @table_info
         String      :hash
         index       :hash
       end
