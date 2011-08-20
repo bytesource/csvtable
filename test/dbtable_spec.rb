@@ -14,11 +14,7 @@ describe "DBTable" do
   describe "Connection" do
 
     before(:each) do
-      @dbtable = DBTable.new :adapter  =>'mysql', 
-        :host     =>'localhost', 
-        :database =>'plastronics', 
-        :user     =>'root', 
-        :password =>'xxx'
+      @dbtable = DBTable.new 
     end
 
     it "connecting to the database should not throw an error" do
@@ -32,11 +28,7 @@ describe "DBTable" do
   describe "Subclasses" do
 
     before(:each) do
-      @dbtable = DBTable.new :adapter  =>'mysql', 
-                             :host     =>'localhost', 
-                             :database =>'plastronics', 
-                             :user     =>'root', 
-                             :password =>'xxx'
+      @dbtable = DBTable.new
     end
 
     it "should return the correct name" do
