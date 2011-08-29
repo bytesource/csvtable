@@ -1,6 +1,8 @@
 # GOAL
 # The following initialization of a CSVParser should be possible:
 
+# require 'dbtable'
+
 # db = database.new
 # 
 # csvparser.new(path, db :table_name => :name)
@@ -8,7 +10,7 @@
 # # alternatively (haven't thought this through yet):
 # csvparser.new do
 #   path   'path/to/table.csv'
-#   db     database.new
+#   db     database.new        # don't pass in the database, but open in inside 'initialize'
 #   name   :name
 # end
 
