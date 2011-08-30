@@ -1,5 +1,5 @@
 require '../lib/csvtable' 
-require '../lib/dbtable'
+require '../lib/csvtable/dbtable'
 
 describe "DBTable" do
 
