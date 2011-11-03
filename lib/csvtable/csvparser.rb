@@ -65,9 +65,9 @@ CSV
 
 # with empty fields
 csv_content2 = <<CSV
-"col1","col2","col3","col4","col5","col6"
+"col1","col2","col3","生日","col5","col6"
 1,2,3,4.433,5,-6.43
-10,20,,,,
+""test"",test2,,,,
 CSV
 
 # pp CSVParser.new.parse(csv_content2)
