@@ -6,6 +6,16 @@ CSVTable reads a csv file from a given path storing its headers and fields.
 The csv data can then be entered into a corresponding database using the CSVTable#execute method.
 [Sequel](http://sequel.rubyforge.org/) is used as the ORM between CSVTable and the database.
 
+## Depreciated
+
+The use of this library has been depreciated in favor of [RStore](https://github.com/bytesource/rstore), which is standard-compliant, more flexible and much easier to use.
+
+`RStore` is available on RubyGems and can therefore be installed like this:
+
+``` bash
+gem install rstore
+```
+
 ## Conventions
 
 ### CSV File
